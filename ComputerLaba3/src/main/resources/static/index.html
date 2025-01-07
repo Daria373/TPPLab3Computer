@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Executor - Cyberpunk Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Загальні стилі сторінки */
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #0d0d0d, #240046, #00ffea, #ff00ff, #0d0d0d);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: #00ffea;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h2, h3 {
+            text-align: center;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px #ff00ff;
+        }
+
+        form {
+            text-align: center;
+            background: rgba(13, 13, 13, 0.9);
+            border: 2px solid #00ffea;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px #00ffea, inset 0px 0px 10px #ff00ff;
+        }
+
+        label {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        #query {
+            width: 80%;
+            height: 150px;
+            margin-top: 10px;
+            border: 2px solid #ff00ff;
+            border-radius: 5px;
+            background-color: #1a1a1a;
+            color: #00ffea;
+            padding: 10px;
+            font-size: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            resize: both;
+            overflow: auto;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: 2px solid #ff00ff;
+            background: linear-gradient(to bottom, #00ffea, #ff00ff);
+            color: #0d0d0d;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0px 4px #ff00ff;
+            transition: all 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background: linear-gradient(to bottom, #ff00ff, #00ffea);
+            box-shadow: 0px 6px #00ffea;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            box-shadow: 0px 2px #00ffea;
+            transform: translateY(2px);
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(13, 13, 13, 0.8);
+            border: 2px solid #00ffea;
+            border-radius: 10px;
+            box-shadow: inset 0px 0px 10px #ff00ff;
+            color: #00ffea;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h2>SQL Executor</h2>
+    <form id="sqlForm">
+        <label for="query">Enter SQL Query:</label><br/>
+        <textarea id="query" name="query" placeholder="Write your SQL query here..."></textarea>
+        <br/>
+        <button type="button" onclick="executeQuery()">Execute</button>
+    </form>
+    <h3>Result:</h3>
+    <div id="result">Results will appear here.</div>
+</div>
+<script>
+    function executeQuery() {
+        const query = document.getElementById('query').value;
+        fetch('/data/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({ query })
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('result').innerHTML = data;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = "Error: " + error.message;
+            });
+    }
+</script>
+</body>
+</html>
